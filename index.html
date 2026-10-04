@@ -1,0 +1,853 @@
+<!doctype html>
+<html lang="en">
+<head>
+<meta charset="utf-8">
+<meta name="viewport" content="width=device-width,initial-scale=1">
+<title>Market Pulse — Student Edition</title>
+
+<style>
+:root{
+  --bg:#f5f7fb;
+  --card:#fff;
+  --text:#162033;
+  --muted:#667085;
+  --line:#e4e7ec;
+  --accent:#315efb;
+  --good:#16803c;
+  --shadow:0 10px 30px rgba(16,24,40,.08)
+}
+
+*{box-sizing:border-box}
+
+body{
+  margin:0;
+  font-family:Inter,system-ui,-apple-system,BlinkMacSystemFont,"Segoe UI",sans-serif;
+  background:var(--bg);
+  color:var(--text)
+}
+
+header{
+  background:#fff;
+  border-bottom:1px solid var(--line);
+  position:sticky;
+  top:0;
+  z-index:5
+}
+
+.wrap{
+  max-width:1180px;
+  margin:auto;
+  padding:18px 22px
+}
+
+.top{
+  display:flex;
+  justify-content:space-between;
+  align-items:center;
+  gap:18px
+}
+
+.brand{
+  display:flex;
+  align-items:center;
+  gap:12px
+}
+
+.logo{
+  width:42px;
+  height:42px;
+  border-radius:12px;
+  background:#111827;
+  color:#fff;
+  display:grid;
+  place-items:center;
+  font-weight:800
+}
+
+.eyebrow{
+  font-size:11px;
+  letter-spacing:.12em;
+  font-weight:800;
+  color:var(--accent)
+}
+
+h1,h2,h3{margin:0 0 8px}
+h1{font-size:26px}
+h2{font-size:22px}
+
+.sub{
+  color:var(--muted);
+  font-size:14px
+}
+
+button{
+  border:0;
+  border-radius:10px;
+  padding:10px 14px;
+  background:var(--accent);
+  color:#fff;
+  font-weight:700;
+  cursor:pointer
+}
+
+.secondary{
+  background:#eef2ff;
+  color:#2646b7
+}
+
+.tabs{
+  display:flex;
+  gap:8px;
+  flex-wrap:wrap;
+  margin:18px 0
+}
+
+.tab{
+  background:#fff;
+  color:var(--text);
+  border:1px solid var(--line)
+}
+
+.tab.active{
+  background:#111827;
+  color:#fff
+}
+
+.grid{
+  display:grid;
+  grid-template-columns:1.5fr .8fr;
+  gap:18px
+}
+
+.card{
+  background:var(--card);
+  border:1px solid var(--line);
+  border-radius:18px;
+  padding:20px;
+  box-shadow:var(--shadow)
+}
+
+.section{
+  margin-top:18px
+}
+
+.market-grid{
+  display:grid;
+  grid-template-columns:repeat(2,1fr);
+  gap:12px
+}
+
+.stock{
+  border:1px solid var(--line);
+  border-radius:14px;
+  padding:16px
+}
+
+.stock-top{
+  display:flex;
+  justify-content:space-between;
+  gap:12px
+}
+
+.ticker{
+  font-weight:800
+}
+
+.price{
+  font-size:24px;
+  font-weight:800;
+  margin:8px 0
+}
+
+.up{color:var(--good)}
+.down{color:#b42318}
+
+.badge{
+  font-size:11px;
+  padding:5px 8px;
+  border-radius:999px;
+  background:#f2f4f7;
+  color:#475467
+}
+
+.meter{
+  height:10px;
+  background:#eaecf0;
+  border-radius:999px;
+  overflow:hidden
+}
+
+.meter i{
+  display:block;
+  height:100%;
+  width:68%;
+  background:var(--accent)
+}
+
+.row{
+  display:flex;
+  justify-content:space-between;
+  gap:12px;
+  align-items:center
+}
+
+.notice{
+  padding:12px 14px;
+  background:#fff8e1;
+  border:1px solid #f2d98b;
+  border-radius:12px;
+  color:#6b4f00;
+  font-size:13px
+}
+
+input,select{
+  width:100%;
+  padding:11px 12px;
+  border:1px solid #d0d5dd;
+  border-radius:10px;
+  background:#fff;
+  color:var(--text);
+  margin:6px 0 12px
+}
+
+label{
+  font-size:12px;
+  font-weight:700;
+  color:#475467
+}
+
+.lesson{
+  padding:14px 0;
+  border-bottom:1px solid var(--line)
+}
+
+.lesson:last-child{
+  border:0
+}
+
+.lesson a{
+  color:var(--accent);
+  font-weight:700;
+  text-decoration:none
+}
+
+.modal{
+  display:none;
+  position:fixed;
+  inset:0;
+  background:rgba(16,24,40,.45);
+  z-index:20;
+  align-items:center;
+  justify-content:center
+}
+
+.modal.open{
+  display:flex
+}
+
+.modal-card{
+  background:#fff;
+  border-radius:18px;
+  padding:24px;
+  max-width:760px;
+  width:92vw;
+  max-height:90vh;
+  overflow:auto;
+  position:relative
+}
+
+.close{
+  position:absolute;
+  right:18px;
+  top:12px;
+  background:none;
+  color:#111;
+  font-size:28px;
+  padding:0
+}
+
+.teacher-grid{
+  display:grid;
+  grid-template-columns:1fr 1fr;
+  gap:20px
+}
+
+.teacher-panel{
+  border:1px solid var(--line);
+  border-radius:16px;
+  padding:20px
+}
+
+.stats{
+  display:grid;
+  grid-template-columns:repeat(3,1fr);
+  gap:10px;
+  margin:12px 0 22px
+}
+
+.stats div{
+  padding:14px;
+  border:1px solid var(--line);
+  border-radius:12px;
+  text-align:center
+}
+
+.stats b{
+  display:block;
+  font-size:22px
+}
+
+.stats span,
+.assignment span,
+.assignment strong{
+  display:block;
+  font-size:12px;
+  color:var(--muted);
+  margin-top:4px
+}
+
+.assignment{
+  padding:14px 0;
+  border-bottom:1px solid var(--line)
+}
+
+footer{
+  padding:30px 0 50px;
+  color:var(--muted);
+  font-size:12px
+}
+
+@media(max-width:800px){
+  .grid,.teacher-grid{
+    grid-template-columns:1fr
+  }
+
+  .market-grid{
+    grid-template-columns:1fr
+  }
+
+  .top{
+    align-items:flex-start
+  }
+
+  .top button{
+    white-space:nowrap
+  }
+}
+</style>
+</head>
+
+<body>
+
+<header>
+<div class="wrap top">
+
+<div class="brand">
+<div class="logo">MP</div>
+<div>
+<div class="eyebrow">STUDENT MARKET LAB</div>
+<h1>Market Pulse</h1>
+</div>
+</div>
+
+<button class="secondary" onclick="openTeacher()">
+Teacher Dashboard
+</button>
+
+</div>
+</header>
+
+<main class="wrap">
+
+<div class="tabs">
+<button class="tab active">Dashboard</button>
+<button class="tab">Learn</button>
+<button class="tab">Paper Trading</button>
+<button class="tab">My Progress</button>
+</div>
+
+<div class="grid">
+
+<section class="card">
+
+<div class="row">
+<div>
+<div class="eyebrow">MARKET WATCH</div>
+<h2>Build your market skills</h2>
+<div class="sub">
+Use the examples below to practice reading price movement, risk, and diversification.
+</div>
+</div>
+
+<span class="badge">Educational mode</span>
+</div>
+
+<div class="market-grid section">
+
+<div class="stock">
+<div class="stock-top">
+<span class="ticker">VOO</span>
+<span class="badge">Index fund</span>
+</div>
+<div class="price">$612.40</div>
+<div class="up">+0.8%</div>
+</div>
+
+<div class="stock">
+<div class="stock-top">
+<span class="ticker">AAPL</span>
+<span class="badge">Watch</span>
+</div>
+<div class="price">$274.31</div>
+<div class="up">+0.4%</div>
+</div>
+
+<div class="stock">
+<div class="stock-top">
+<span class="ticker">MSFT</span>
+<span class="badge">Watch</span>
+</div>
+<div class="price">$531.22</div>
+<div class="down">-0.2%</div>
+</div>
+
+<div class="stock">
+<div class="stock-top">
+<span class="ticker">SPY</span>
+<span class="badge">Index fund</span>
+</div>
+<div class="price">$671.55</div>
+<div class="up">+0.6%</div>
+</div>
+
+</div>
+
+<div class="section">
+
+<label>Add a ticker to your watchlist</label>
+
+<div class="row">
+
+<input
+id="ticker"
+placeholder="e.g. NVDA"
+style="margin-right:8px"
+>
+
+<button onclick="addTicker()">Add</button>
+
+</div>
+
+<div id="added" class="sub"></div>
+
+</div>
+
+</section>
+
+<aside class="card">
+
+<div class="eyebrow">LEARNING SCORE</div>
+
+<h2>68%</h2>
+
+<div class="meter">
+<i></i>
+</div>
+
+<p class="sub">
+Complete lessons and quizzes to improve your understanding—not to chase a trading win rate.
+</p>
+
+<div class="notice">
+There is no guaranteed “best” time to buy or sell. Market Pulse teaches decision-making skills and uses paper trading for practice.
+</div>
+
+</aside>
+
+</div>
+
+<section class="card section">
+
+<div class="eyebrow">PERSONALIZE</div>
+
+<h2>Make the dashboard work for you</h2>
+
+<div class="market-grid">
+
+<div>
+<label>Experience</label>
+
+<select id="experience" onchange="savePrefs()">
+<option>New to investing</option>
+<option>Some experience</option>
+<option>Advanced learner</option>
+</select>
+
+</div>
+
+<div>
+
+<label>Learning goal</label>
+
+<select id="goal" onchange="savePrefs()">
+<option>Understand index funds</option>
+<option>Learn risk & diversification</option>
+<option>Practice reading market trends</option>
+</select>
+
+</div>
+
+</div>
+
+</section>
+
+<section class="card section">
+
+<div class="eyebrow">LEARN</div>
+
+<h2>Short lessons</h2>
+
+<div class="lesson">
+
+<b>Index funds & diversification</b>
+
+<div class="sub">
+Learn why owning many companies can reduce company-specific risk.
+</div>
+
+<a
+href="https://www.investor.gov/introduction-investing/investing-basics/investment-products/mutual-funds-and-exchange-traded-funds-etfs"
+target="_blank"
+rel="noopener"
+>
+Investor.gov lesson →
+</a>
+
+</div>
+
+<div class="lesson">
+
+<b>Risk and return</b>
+
+<div class="sub">
+Understand why higher potential returns generally come with higher uncertainty.
+</div>
+
+<a
+href="https://www.investor.gov/introduction-investing/investing-basics/asset-allocation"
+target="_blank"
+rel="noopener"
+>
+Investor.gov lesson →
+</a>
+
+</div>
+
+<div class="lesson">
+
+<b>Paper-trading reflection</b>
+
+<div class="sub">
+Write down what evidence you considered before making a simulated decision.
+</div>
+
+</div>
+
+</section>
+
+<section class="card section">
+
+<div class="row">
+
+<div>
+
+<div class="eyebrow">TEACHER TOOLS</div>
+
+<h2>Teacher Dashboard</h2>
+
+<div class="sub">
+Create classroom-ready assignments and set a starting paper-trading amount.
+</div>
+
+</div>
+
+<button class="secondary" onclick="openTeacher()">
+Open dashboard
+</button>
+
+</div>
+
+</section>
+
+<footer>
+Market Pulse is an educational prototype. It does not execute trades, provide individualized financial advice, or guarantee outcomes. Example prices are for learning only.
+</footer>
+
+</main>
+
+<div class="modal" id="teacherModal">
+
+<div class="modal-card">
+
+<button class="close" onclick="closeTeacher()">×</button>
+
+<div class="eyebrow">CLASSROOM</div>
+
+<h2>Teacher Dashboard</h2>
+
+<div class="teacher-grid">
+
+<div class="teacher-panel">
+
+<h3>Class: Financial Foundations</h3>
+
+<div class="stats">
+
+<div>
+<b>24</b>
+<span>Students</span>
+</div>
+
+<div>
+<b>18</b>
+<span>Completed</span>
+</div>
+
+<div>
+<b>82%</b>
+<span>Avg. quiz</span>
+</div>
+
+</div>
+
+<h3>Class access</h3>
+
+<label>Teacher-given class code</label>
+
+<input id="classCode" value="MP-4827">
+
+<button onclick="saveClassCode()">
+Save class code
+</button>
+
+<p class="sub">
+Students can use the same code on this device. This prototype stores it locally in the browser.
+</p>
+
+<h3>Starting paper-trading amount</h3>
+
+<label>Beginning balance</label>
+
+<select id="startingBalance" onchange="saveBalance()">
+<option value="5000">$5,000</option>
+<option value="10000">$10,000</option>
+<option value="25000">$25,000</option>
+<option value="50000">$50,000</option>
+</select>
+
+<p class="sub">
+Use paper trading only. This setting is a classroom simulation balance.
+</p>
+
+<h3>Create assignment</h3>
+
+<label>Assignment title</label>
+
+<input
+id="aTitle"
+placeholder="e.g. Index Funds Basics"
+>
+
+<label>Type</label>
+
+<select id="aType">
+<option>Reading + quiz</option>
+<option>Reading</option>
+<option>Quiz</option>
+<option>Paper-trading reflection</option>
+</select>
+
+<label>Due date</label>
+
+<input id="aDue" type="date">
+
+<button onclick="createAssignment()">
+Assign to class
+</button>
+
+</div>
+
+<div class="teacher-panel">
+
+<h3>Current assignments</h3>
+
+<div id="assignments">
+
+<div class="assignment">
+<b>Index Funds Basics</b>
+<span>Reading + 5 questions • Due Friday</span>
+<strong>18/24 complete</strong>
+</div>
+
+<div class="assignment">
+<b>Risk & Diversification</b>
+<span>6-minute reading + quiz</span>
+<strong>21/24 complete</strong>
+</div>
+
+<div class="assignment">
+<b>Paper Trading Reflection</b>
+<span>Explain your simulated decision</span>
+<strong>14/24 complete</strong>
+</div>
+
+</div>
+
+<h3>Class insights</h3>
+
+<div class="notice">
+Most students understand diversification. Consider assigning the risk-and-fees lesson next.
+</div>
+
+</div>
+
+</div>
+
+</div>
+
+</div>
+
+<script>
+
+function openTeacher(){
+document.getElementById('teacherModal').classList.add('open')
+}
+
+function closeTeacher(){
+document.getElementById('teacherModal').classList.remove('open')
+}
+
+function addTicker(){
+
+const t=document
+.getElementById('ticker')
+.value
+.trim()
+.toUpperCase()
+.replace(/[^A-Z.]/g,'');
+
+if(t){
+
+document.getElementById('added').textContent=
+t+' added to your practice watchlist.';
+
+document.getElementById('ticker').value='';
+
+}
+
+}
+
+function savePrefs(){
+
+localStorage.setItem(
+'mpExperience',
+document.getElementById('experience').value
+);
+
+localStorage.setItem(
+'mpGoal',
+document.getElementById('goal').value
+);
+
+}
+
+function saveClassCode(){
+
+const c=document
+.getElementById('classCode')
+.value
+.trim()
+.toUpperCase();
+
+localStorage.setItem('mpClassCode',c);
+
+alert('Class code saved on this device: '+c);
+
+}
+
+function saveBalance(){
+
+localStorage.setItem(
+'mpStartingBalance',
+document.getElementById('startingBalance').value
+);
+
+}
+
+function createAssignment(){
+
+const t=
+document.getElementById('aTitle')
+.value
+.trim()
+||
+'New investing assignment';
+
+const type=
+document.getElementById('aType').value;
+
+const due=
+document.getElementById('aDue').value
+?
+new Date(
+document.getElementById('aDue').value+'T00:00'
+).toLocaleDateString()
+:
+'Set due date';
+
+const el=document.createElement('div');
+
+el.className='assignment';
+
+el.innerHTML=
+'<b>'+
+t.replace(/[<>]/g,'')+
+'</b><span>'+
+type+
+' • Due '+
+due+
+'</span><strong>0/24 complete</strong>';
+
+document
+.getElementById('assignments')
+.prepend(el);
+
+document.getElementById('aTitle').value='';
+
+}
+
+window.addEventListener('load',()=>{
+
+const e=localStorage.getItem('mpExperience');
+const g=localStorage.getItem('mpGoal');
+const c=localStorage.getItem('mpClassCode');
+const b=localStorage.getItem('mpStartingBalance');
+
+if(e)
+document.getElementById('experience').value=e;
+
+if(g)
+document.getElementById('goal').value=g;
+
+if(c)
+document.getElementById('classCode').value=c;
+
+if(b)
+document.getElementById('startingBalance').value=b;
+
+});
+
+</script>
+
+</body>
+</html>
