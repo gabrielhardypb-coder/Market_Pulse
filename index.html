@@ -1,853 +1,1584 @@
-<!doctype html>
+<!DOCTYPE html>
 <html lang="en">
 <head>
-<meta charset="utf-8">
-<meta name="viewport" content="width=device-width,initial-scale=1">
-<title>Market Pulse — Student Edition</title>
+  <meta charset="UTF-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+  <meta name="theme-color" content="#315efb" />
+  <title>Market Pulse</title>
 
-<style>
-:root{
-  --bg:#f5f7fb;
-  --card:#fff;
-  --text:#162033;
-  --muted:#667085;
-  --line:#e4e7ec;
-  --accent:#315efb;
-  --good:#16803c;
-  --shadow:0 10px 30px rgba(16,24,40,.08)
-}
+  <style>
+    :root {
+      --bg: #f5f7fb;
+      --card: #ffffff;
+      --text: #162033;
+      --muted: #667085;
+      --line: #e4e7ec;
+      --accent: #315efb;
+      --accent-dark: #244bd0;
+      --good: #16803c;
+      --danger: #c62828;
+      --shadow: 0 12px 35px rgba(16, 24, 40, 0.08);
+      --radius: 18px;
+    }
 
-*{box-sizing:border-box}
+    * {
+      box-sizing: border-box;
+    }
 
-body{
-  margin:0;
-  font-family:Inter,system-ui,-apple-system,BlinkMacSystemFont,"Segoe UI",sans-serif;
-  background:var(--bg);
-  color:var(--text)
-}
+    body {
+      margin: 0;
+      font-family: -apple-system, BlinkMacSystemFont, "Segoe UI", Roboto,
+        Helvetica, Arial, sans-serif;
+      background: var(--bg);
+      color: var(--text);
+    }
 
-header{
-  background:#fff;
-  border-bottom:1px solid var(--line);
-  position:sticky;
-  top:0;
-  z-index:5
-}
+    button,
+    input,
+    select,
+    textarea {
+      font: inherit;
+    }
 
-.wrap{
-  max-width:1180px;
-  margin:auto;
-  padding:18px 22px
-}
+    button {
+      cursor: pointer;
+    }
 
-.top{
-  display:flex;
-  justify-content:space-between;
-  align-items:center;
-  gap:18px
-}
+    .hidden {
+      display: none !important;
+    }
 
-.brand{
-  display:flex;
-  align-items:center;
-  gap:12px
-}
+    /* HEADER */
 
-.logo{
-  width:42px;
-  height:42px;
-  border-radius:12px;
-  background:#111827;
-  color:#fff;
-  display:grid;
-  place-items:center;
-  font-weight:800
-}
+    header {
+      height: 76px;
+      background: white;
+      border-bottom: 1px solid var(--line);
+      display: flex;
+      align-items: center;
+      justify-content: space-between;
+      padding: 0 28px;
+      position: sticky;
+      top: 0;
+      z-index: 20;
+    }
 
-.eyebrow{
-  font-size:11px;
-  letter-spacing:.12em;
-  font-weight:800;
-  color:var(--accent)
-}
+    .brand {
+      display: flex;
+      align-items: center;
+      gap: 12px;
+      font-weight: 800;
+      font-size: 21px;
+    }
 
-h1,h2,h3{margin:0 0 8px}
-h1{font-size:26px}
-h2{font-size:22px}
+    .logo {
+      width: 42px;
+      height: 42px;
+      border-radius: 12px;
+      background: var(--accent);
+      color: white;
+      display: grid;
+      place-items: center;
+      font-weight: 900;
+      letter-spacing: -1px;
+    }
 
-.sub{
-  color:var(--muted);
-  font-size:14px
-}
+    .header-actions {
+      display: flex;
+      gap: 10px;
+      align-items: center;
+    }
 
-button{
-  border:0;
-  border-radius:10px;
-  padding:10px 14px;
-  background:var(--accent);
-  color:#fff;
-  font-weight:700;
-  cursor:pointer
-}
+    .button {
+      border: 0;
+      border-radius: 11px;
+      padding: 10px 16px;
+      font-weight: 700;
+      transition: 0.15s ease;
+    }
 
-.secondary{
-  background:#eef2ff;
-  color:#2646b7
-}
+    .button:hover {
+      transform: translateY(-1px);
+    }
 
-.tabs{
-  display:flex;
-  gap:8px;
-  flex-wrap:wrap;
-  margin:18px 0
-}
+    .button-primary {
+      background: var(--accent);
+      color: white;
+    }
 
-.tab{
-  background:#fff;
-  color:var(--text);
-  border:1px solid var(--line)
-}
+    .button-primary:hover {
+      background: var(--accent-dark);
+    }
 
-.tab.active{
-  background:#111827;
-  color:#fff
-}
+    .button-secondary {
+      background: #eef2ff;
+      color: var(--accent);
+    }
 
-.grid{
-  display:grid;
-  grid-template-columns:1.5fr .8fr;
-  gap:18px
-}
+    .button-ghost {
+      background: transparent;
+      color: var(--muted);
+      border: 1px solid var(--line);
+    }
 
-.card{
-  background:var(--card);
-  border:1px solid var(--line);
-  border-radius:18px;
-  padding:20px;
-  box-shadow:var(--shadow)
-}
+    /* JOIN SCREEN */
 
-.section{
-  margin-top:18px
-}
+    .join-screen {
+      min-height: calc(100vh - 76px);
+      display: flex;
+      align-items: center;
+      justify-content: center;
+      padding: 30px 20px;
+    }
 
-.market-grid{
-  display:grid;
-  grid-template-columns:repeat(2,1fr);
-  gap:12px
-}
+    .join-card {
+      width: min(480px, 100%);
+      background: white;
+      border: 1px solid var(--line);
+      border-radius: 24px;
+      box-shadow: var(--shadow);
+      padding: 38px;
+      text-align: center;
+    }
 
-.stock{
-  border:1px solid var(--line);
-  border-radius:14px;
-  padding:16px
-}
+    .join-logo {
+      width: 64px;
+      height: 64px;
+      border-radius: 18px;
+      background: var(--accent);
+      color: white;
+      display: grid;
+      place-items: center;
+      margin: 0 auto 22px;
+      font-size: 22px;
+      font-weight: 900;
+    }
 
-.stock-top{
-  display:flex;
-  justify-content:space-between;
-  gap:12px
-}
+    .join-card h1 {
+      margin: 0 0 10px;
+      font-size: 30px;
+      letter-spacing: -0.7px;
+    }
 
-.ticker{
-  font-weight:800
-}
+    .join-card p {
+      margin: 0 auto 26px;
+      color: var(--muted);
+      line-height: 1.6;
+      max-width: 380px;
+    }
 
-.price{
-  font-size:24px;
-  font-weight:800;
-  margin:8px 0
-}
+    .join-form {
+      text-align: left;
+    }
 
-.up{color:var(--good)}
-.down{color:#b42318}
+    .join-form label {
+      display: block;
+      margin-bottom: 8px;
+      font-weight: 700;
+      font-size: 14px;
+    }
 
-.badge{
-  font-size:11px;
-  padding:5px 8px;
-  border-radius:999px;
-  background:#f2f4f7;
-  color:#475467
-}
+    .code-input {
+      width: 100%;
+      border: 1px solid var(--line);
+      border-radius: 12px;
+      padding: 14px 15px;
+      outline: none;
+      text-transform: uppercase;
+      font-size: 17px;
+      letter-spacing: 1px;
+      text-align: center;
+    }
 
-.meter{
-  height:10px;
-  background:#eaecf0;
-  border-radius:999px;
-  overflow:hidden
-}
+    .code-input:focus {
+      border-color: var(--accent);
+      box-shadow: 0 0 0 3px rgba(49, 94, 251, 0.12);
+    }
 
-.meter i{
-  display:block;
-  height:100%;
-  width:68%;
-  background:var(--accent)
-}
+    .join-button {
+      width: 100%;
+      margin-top: 14px;
+      padding: 14px;
+      font-size: 16px;
+    }
 
-.row{
-  display:flex;
-  justify-content:space-between;
-  gap:12px;
-  align-items:center
-}
+    .join-error {
+      color: var(--danger);
+      margin-top: 12px;
+      text-align: center;
+      font-size: 14px;
+      min-height: 20px;
+    }
 
-.notice{
-  padding:12px 14px;
-  background:#fff8e1;
-  border:1px solid #f2d98b;
-  border-radius:12px;
-  color:#6b4f00;
-  font-size:13px
-}
+    .teacher-link {
+      margin-top: 22px;
+      font-size: 14px;
+      color: var(--muted);
+    }
 
-input,select{
-  width:100%;
-  padding:11px 12px;
-  border:1px solid #d0d5dd;
-  border-radius:10px;
-  background:#fff;
-  color:var(--text);
-  margin:6px 0 12px
-}
+    .teacher-link button {
+      background: none;
+      border: 0;
+      color: var(--accent);
+      font-weight: 700;
+      padding: 0;
+    }
 
-label{
-  font-size:12px;
-  font-weight:700;
-  color:#475467
-}
+    /* STUDENT APP */
 
-.lesson{
-  padding:14px 0;
-  border-bottom:1px solid var(--line)
-}
+    .app-container {
+      max-width: 1180px;
+      margin: 0 auto;
+      padding: 30px 22px 60px;
+    }
 
-.lesson:last-child{
-  border:0
-}
+    .welcome {
+      margin-bottom: 24px;
+    }
 
-.lesson a{
-  color:var(--accent);
-  font-weight:700;
-  text-decoration:none
-}
+    .welcome h1 {
+      margin: 0 0 7px;
+      font-size: 30px;
+      letter-spacing: -0.7px;
+    }
 
-.modal{
-  display:none;
-  position:fixed;
-  inset:0;
-  background:rgba(16,24,40,.45);
-  z-index:20;
-  align-items:center;
-  justify-content:center
-}
+    .welcome p {
+      color: var(--muted);
+      margin: 0;
+    }
 
-.modal.open{
-  display:flex
-}
+    .class-banner {
+      background: #eef2ff;
+      border: 1px solid #dbe3ff;
+      border-radius: 16px;
+      padding: 15px 18px;
+      margin-bottom: 24px;
+      display: flex;
+      align-items: center;
+      justify-content: space-between;
+      gap: 15px;
+      flex-wrap: wrap;
+    }
 
-.modal-card{
-  background:#fff;
-  border-radius:18px;
-  padding:24px;
-  max-width:760px;
-  width:92vw;
-  max-height:90vh;
-  overflow:auto;
-  position:relative
-}
+    .class-banner strong {
+      color: var(--accent);
+    }
 
-.close{
-  position:absolute;
-  right:18px;
-  top:12px;
-  background:none;
-  color:#111;
-  font-size:28px;
-  padding:0
-}
+    .class-banner span {
+      color: var(--muted);
+      font-size: 14px;
+    }
 
-.teacher-grid{
-  display:grid;
-  grid-template-columns:1fr 1fr;
-  gap:20px
-}
+    .grid {
+      display: grid;
+      grid-template-columns: repeat(2, minmax(0, 1fr));
+      gap: 20px;
+    }
 
-.teacher-panel{
-  border:1px solid var(--line);
-  border-radius:16px;
-  padding:20px
-}
+    .card {
+      background: white;
+      border: 1px solid var(--line);
+      border-radius: var(--radius);
+      box-shadow: var(--shadow);
+      padding: 22px;
+    }
 
-.stats{
-  display:grid;
-  grid-template-columns:repeat(3,1fr);
-  gap:10px;
-  margin:12px 0 22px
-}
+    .card-full {
+      grid-column: 1 / -1;
+    }
 
-.stats div{
-  padding:14px;
-  border:1px solid var(--line);
-  border-radius:12px;
-  text-align:center
-}
+    .card h2 {
+      margin: 0 0 7px;
+      font-size: 20px;
+    }
 
-.stats b{
-  display:block;
-  font-size:22px
-}
+    .card-description {
+      color: var(--muted);
+      margin: 0 0 18px;
+      font-size: 14px;
+      line-height: 1.5;
+    }
 
-.stats span,
-.assignment span,
-.assignment strong{
-  display:block;
-  font-size:12px;
-  color:var(--muted);
-  margin-top:4px
-}
+    .balance {
+      font-size: 34px;
+      font-weight: 800;
+      margin: 8px 0;
+    }
 
-.assignment{
-  padding:14px 0;
-  border-bottom:1px solid var(--line)
-}
+    .balance-label {
+      color: var(--muted);
+      font-size: 14px;
+    }
 
-footer{
-  padding:30px 0 50px;
-  color:var(--muted);
-  font-size:12px
-}
+    .empty-state {
+      border: 1px dashed #cfd5df;
+      border-radius: 14px;
+      padding: 28px 20px;
+      text-align: center;
+      color: var(--muted);
+      background: #fafbfc;
+    }
 
-@media(max-width:800px){
-  .grid,.teacher-grid{
-    grid-template-columns:1fr
-  }
+    .empty-state strong {
+      display: block;
+      color: var(--text);
+      margin-bottom: 6px;
+    }
 
-  .market-grid{
-    grid-template-columns:1fr
-  }
+    /* ASSIGNMENTS */
 
-  .top{
-    align-items:flex-start
-  }
+    .assignment-list {
+      display: grid;
+      gap: 12px;
+    }
 
-  .top button{
-    white-space:nowrap
-  }
-}
-</style>
+    .assignment {
+      border: 1px solid var(--line);
+      border-radius: 14px;
+      padding: 17px;
+      background: #fff;
+    }
+
+    .assignment-top {
+      display: flex;
+      justify-content: space-between;
+      gap: 15px;
+      align-items: flex-start;
+    }
+
+    .assignment h3 {
+      margin: 0 0 5px;
+      font-size: 16px;
+    }
+
+    .assignment p {
+      margin: 0;
+      color: var(--muted);
+      font-size: 14px;
+      line-height: 1.5;
+    }
+
+    .assignment-type {
+      background: #eef2ff;
+      color: var(--accent);
+      border-radius: 999px;
+      padding: 5px 9px;
+      font-size: 12px;
+      font-weight: 700;
+      white-space: nowrap;
+    }
+
+    /* TEACHER MODAL */
+
+    .modal-backdrop {
+      position: fixed;
+      inset: 0;
+      background: rgba(16, 24, 40, 0.45);
+      display: flex;
+      align-items: center;
+      justify-content: center;
+      padding: 20px;
+      z-index: 100;
+    }
+
+    .modal {
+      background: white;
+      width: min(760px, 100%);
+      max-height: 90vh;
+      overflow-y: auto;
+      border-radius: 22px;
+      box-shadow: 0 25px 70px rgba(16, 24, 40, 0.22);
+      padding: 25px;
+    }
+
+    .modal-header {
+      display: flex;
+      justify-content: space-between;
+      gap: 15px;
+      align-items: center;
+      margin-bottom: 22px;
+    }
+
+    .modal-header h2 {
+      margin: 0;
+    }
+
+    .close-button {
+      width: 38px;
+      height: 38px;
+      border: 1px solid var(--line);
+      background: white;
+      border-radius: 10px;
+      font-size: 20px;
+      color: var(--muted);
+    }
+
+    .teacher-section {
+      border-top: 1px solid var(--line);
+      padding-top: 20px;
+      margin-top: 20px;
+    }
+
+    .teacher-section h3 {
+      margin: 0 0 14px;
+      font-size: 17px;
+    }
+
+    .form-grid {
+      display: grid;
+      grid-template-columns: 1fr 1fr;
+      gap: 14px;
+    }
+
+    .field label {
+      display: block;
+      font-weight: 700;
+      font-size: 13px;
+      margin-bottom: 7px;
+    }
+
+    .field input,
+    .field select,
+    .field textarea {
+      width: 100%;
+      border: 1px solid var(--line);
+      border-radius: 10px;
+      padding: 11px 12px;
+      outline: none;
+    }
+
+    .field textarea {
+      min-height: 90px;
+      resize: vertical;
+    }
+
+    .field input:focus,
+    .field select:focus,
+    .field textarea:focus {
+      border-color: var(--accent);
+      box-shadow: 0 0 0 3px rgba(49, 94, 251, 0.1);
+    }
+
+    .save-row {
+      margin-top: 14px;
+      display: flex;
+      justify-content: flex-end;
+    }
+
+    .teacher-note {
+      background: #f8fafc;
+      border-radius: 12px;
+      padding: 13px;
+      color: var(--muted);
+      font-size: 13px;
+      line-height: 1.5;
+      margin-top: 12px;
+    }
+
+    .teacher-assignment-list {
+      display: grid;
+      gap: 10px;
+    }
+
+    .teacher-assignment {
+      border: 1px solid var(--line);
+      border-radius: 12px;
+      padding: 13px;
+      display: flex;
+      justify-content: space-between;
+      gap: 15px;
+      align-items: center;
+    }
+
+    .teacher-assignment strong {
+      display: block;
+      margin-bottom: 3px;
+    }
+
+    .teacher-assignment small {
+      color: var(--muted);
+    }
+
+    .delete-assignment {
+      background: #fff;
+      border: 1px solid #f0caca;
+      color: var(--danger);
+      border-radius: 9px;
+      padding: 7px 10px;
+      font-weight: 700;
+    }
+
+    .teacher-success {
+      color: var(--good);
+      font-size: 13px;
+      margin-top: 9px;
+      min-height: 18px;
+    }
+
+    /* MOBILE */
+
+    @media (max-width: 800px) {
+      .grid {
+        grid-template-columns: 1fr;
+      }
+
+      .card-full {
+        grid-column: auto;
+      }
+
+      .form-grid {
+        grid-template-columns: 1fr;
+      }
+
+      header {
+        padding: 0 16px;
+      }
+
+      .app-container {
+        padding: 22px 15px 45px;
+      }
+
+      .join-card {
+        padding: 28px 21px;
+      }
+
+      .header-actions .button {
+        padding: 9px 11px;
+      }
+    }
+
+    @media (max-width: 500px) {
+      .brand span {
+        display: none;
+      }
+
+      .welcome h1 {
+        font-size: 26px;
+      }
+
+      .assignment-top {
+        flex-direction: column;
+      }
+    }
+  </style>
 </head>
 
 <body>
 
-<header>
-<div class="wrap top">
-
-<div class="brand">
-<div class="logo">MP</div>
-<div>
-<div class="eyebrow">STUDENT MARKET LAB</div>
-<h1>Market Pulse</h1>
-</div>
-</div>
-
-<button class="secondary" onclick="openTeacher()">
-Teacher Dashboard
-</button>
-
-</div>
-</header>
-
-<main class="wrap">
+  <!-- HEADER -->
+  <header>
+    <div class="brand">
+      <div class="logo">MP</div>
+      <span>Market Pulse</span>
+    </div>
 
-<div class="tabs">
-<button class="tab active">Dashboard</button>
-<button class="tab">Learn</button>
-<button class="tab">Paper Trading</button>
-<button class="tab">My Progress</button>
-</div>
+    <div class="header-actions">
+      <button class="button button-ghost" id="teacherButton">
+        Teacher Dashboard
+      </button>
+    </div>
+  </header>
 
-<div class="grid">
 
-<section class="card">
+  <!-- FIRST VISIT / JOIN CLASS -->
+  <section id="joinScreen" class="join-screen">
 
-<div class="row">
-<div>
-<div class="eyebrow">MARKET WATCH</div>
-<h2>Build your market skills</h2>
-<div class="sub">
-Use the examples below to practice reading price movement, risk, and diversification.
-</div>
-</div>
+    <div class="join-card">
 
-<span class="badge">Educational mode</span>
-</div>
+      <div class="join-logo">MP</div>
 
-<div class="market-grid section">
+      <h1>Welcome to Market Pulse</h1>
 
-<div class="stock">
-<div class="stock-top">
-<span class="ticker">VOO</span>
-<span class="badge">Index fund</span>
-</div>
-<div class="price">$612.40</div>
-<div class="up">+0.8%</div>
-</div>
+      <p>
+        Enter the class code provided by your teacher to get started.
+      </p>
 
-<div class="stock">
-<div class="stock-top">
-<span class="ticker">AAPL</span>
-<span class="badge">Watch</span>
-</div>
-<div class="price">$274.31</div>
-<div class="up">+0.4%</div>
-</div>
+      <div class="join-form">
 
-<div class="stock">
-<div class="stock-top">
-<span class="ticker">MSFT</span>
-<span class="badge">Watch</span>
-</div>
-<div class="price">$531.22</div>
-<div class="down">-0.2%</div>
-</div>
+        <label for="classCodeInput">
+          Teacher Class Code
+        </label>
 
-<div class="stock">
-<div class="stock-top">
-<span class="ticker">SPY</span>
-<span class="badge">Index fund</span>
-</div>
-<div class="price">$671.55</div>
-<div class="up">+0.6%</div>
-</div>
+        <input
+          id="classCodeInput"
+          class="code-input"
+          type="text"
+          placeholder="Example: MP-4827"
+          autocomplete="off"
+          maxlength="20"
+        />
 
-</div>
+        <button
+          id="joinClassButton"
+          class="button button-primary join-button"
+        >
+          Join Class
+        </button>
 
-<div class="section">
+        <div id="joinError" class="join-error"></div>
 
-<label>Add a ticker to your watchlist</label>
+      </div>
 
-<div class="row">
+      <div class="teacher-link">
+        Are you a teacher?
+        <button id="teacherLinkButton">Open Teacher Dashboard</button>
+      </div>
 
-<input
-id="ticker"
-placeholder="e.g. NVDA"
-style="margin-right:8px"
->
+    </div>
 
-<button onclick="addTicker()">Add</button>
+  </section>
 
-</div>
 
-<div id="added" class="sub"></div>
+  <!-- STUDENT APP -->
+  <main id="studentApp" class="app-container hidden">
 
-</div>
+    <div class="welcome">
+      <h1>Welcome to Market Pulse</h1>
+      <p>Your class materials and paper-trading information will appear here.</p>
+    </div>
 
-</section>
+    <div class="class-banner">
+      <div>
+        <strong>Class joined</strong>
+        <span id="studentClassCode"></span>
+      </div>
 
-<aside class="card">
+      <button id="leaveClassButton" class="button button-ghost">
+        Leave Class
+      </button>
+    </div>
 
-<div class="eyebrow">LEARNING SCORE</div>
 
-<h2>68%</h2>
+    <div class="grid">
 
-<div class="meter">
-<i></i>
-</div>
+      <!-- PAPER TRADING -->
+      <section class="card">
 
-<p class="sub">
-Complete lessons and quizzes to improve your understanding—not to chase a trading win rate.
-</p>
+        <h2>Paper Trading</h2>
 
-<div class="notice">
-There is no guaranteed “best” time to buy or sell. Market Pulse teaches decision-making skills and uses paper trading for practice.
-</div>
+        <p class="card-description">
+          Your teacher's starting paper-trading amount is shown below.
+        </p>
 
-</aside>
+        <div class="balance" id="studentBalance">
+          $5,000
+        </div>
 
-</div>
+        <div class="balance-label">
+          Starting paper-trading balance
+        </div>
 
-<section class="card section">
+      </section>
 
-<div class="eyebrow">PERSONALIZE</div>
 
-<h2>Make the dashboard work for you</h2>
+      <!-- PROGRESS -->
+      <section class="card">
 
-<div class="market-grid">
+        <h2>My Progress</h2>
 
-<div>
-<label>Experience</label>
+        <p class="card-description">
+          Your class progress will build as you complete your teacher's work.
+        </p>
 
-<select id="experience" onchange="savePrefs()">
-<option>New to investing</option>
-<option>Some experience</option>
-<option>Advanced learner</option>
-</select>
+        <div class="empty-state">
+          <strong>Ready to learn</strong>
+          Your progress will appear here after you begin completing assignments.
+        </div>
 
-</div>
+      </section>
 
-<div>
 
-<label>Learning goal</label>
+      <!-- ASSIGNMENTS -->
+      <section class="card card-full">
 
-<select id="goal" onchange="savePrefs()">
-<option>Understand index funds</option>
-<option>Learn risk & diversification</option>
-<option>Practice reading market trends</option>
-</select>
+        <h2>Teacher Assignments</h2>
 
-</div>
+        <p class="card-description">
+          Anything your teacher assigns will appear here.
+        </p>
 
-</div>
+        <div id="studentAssignments" class="assignment-list"></div>
 
-</section>
+      </section>
 
-<section class="card section">
 
-<div class="eyebrow">LEARN</div>
+      <!-- READINGS -->
+      <section class="card card-full">
 
-<h2>Short lessons</h2>
+        <h2>Assigned Readings</h2>
 
-<div class="lesson">
+        <p class="card-description">
+          Your teacher can add readings for your class.
+        </p>
 
-<b>Index funds & diversification</b>
+        <div id="studentReadings" class="assignment-list"></div>
 
-<div class="sub">
-Learn why owning many companies can reduce company-specific risk.
-</div>
+      </section>
 
-<a
-href="https://www.investor.gov/introduction-investing/investing-basics/investment-products/mutual-funds-and-exchange-traded-funds-etfs"
-target="_blank"
-rel="noopener"
->
-Investor.gov lesson →
-</a>
+    </div>
 
-</div>
+  </main>
 
-<div class="lesson">
 
-<b>Risk and return</b>
+  <!-- TEACHER DASHBOARD MODAL -->
+  <div id="teacherModal" class="modal-backdrop hidden">
 
-<div class="sub">
-Understand why higher potential returns generally come with higher uncertainty.
-</div>
+    <div class="modal">
 
-<a
-href="https://www.investor.gov/introduction-investing/investing-basics/asset-allocation"
-target="_blank"
-rel="noopener"
->
-Investor.gov lesson →
-</a>
+      <div class="modal-header">
+        <h2>Teacher Dashboard</h2>
 
-</div>
+        <button
+          id="closeTeacherButton"
+          class="close-button"
+          aria-label="Close"
+        >
+          ×
+        </button>
+      </div>
 
-<div class="lesson">
 
-<b>Paper-trading reflection</b>
+      <!-- CLASS SETTINGS -->
 
-<div class="sub">
-Write down what evidence you considered before making a simulated decision.
-</div>
+      <section class="teacher-section">
 
-</div>
+        <h3>Class Settings</h3>
 
-</section>
+        <div class="form-grid">
 
-<section class="card section">
+          <div class="field">
+            <label for="teacherClassCode">
+              Class Code
+            </label>
 
-<div class="row">
+            <input
+              id="teacherClassCode"
+              type="text"
+              value="MP-4827"
+              maxlength="20"
+              placeholder="Example: MP-4827"
+            />
+          </div>
 
-<div>
+          <div class="field">
+            <label for="startingBalance">
+              Starting Paper-Trading Amount
+            </label>
 
-<div class="eyebrow">TEACHER TOOLS</div>
+            <select id="startingBalance">
+              <option value="5000">$5,000</option>
+              <option value="10000">$10,000</option>
+              <option value="25000">$25,000</option>
+              <option value="50000">$50,000</option>
+            </select>
+          </div>
 
-<h2>Teacher Dashboard</h2>
+        </div>
 
-<div class="sub">
-Create classroom-ready assignments and set a starting paper-trading amount.
-</div>
+        <div class="save-row">
+          <button id="saveClassSettings" class="button button-primary">
+            Save Class Settings
+          </button>
+        </div>
 
-</div>
+        <div id="settingsSuccess" class="teacher-success"></div>
 
-<button class="secondary" onclick="openTeacher()">
-Open dashboard
-</button>
+        <div class="teacher-note">
+          Give your students the class code above. Their browser will remember
+          that they joined, so they won't need to enter the code every time.
+        </div>
 
-</div>
+      </section>
 
-</section>
 
-<footer>
-Market Pulse is an educational prototype. It does not execute trades, provide individualized financial advice, or guarantee outcomes. Example prices are for learning only.
-</footer>
+      <!-- ADD ASSIGNMENT -->
 
-</main>
+      <section class="teacher-section">
 
-<div class="modal" id="teacherModal">
+        <h3>Add Assignment</h3>
 
-<div class="modal-card">
+        <div class="form-grid">
 
-<button class="close" onclick="closeTeacher()">×</button>
+          <div class="field">
+            <label for="assignmentTitle">
+              Assignment Title
+            </label>
 
-<div class="eyebrow">CLASSROOM</div>
+            <input
+              id="assignmentTitle"
+              type="text"
+              placeholder="Example: Understanding Index Funds"
+            />
+          </div>
 
-<h2>Teacher Dashboard</h2>
+          <div class="field">
+            <label for="assignmentType">
+              Type
+            </label>
 
-<div class="teacher-grid">
+            <select id="assignmentType">
+              <option value="Reading">Reading</option>
+              <option value="Quiz">Quiz</option>
+              <option value="Activity">Activity</option>
+              <option value="Reflection">Reflection</option>
+            </select>
+          </div>
 
-<div class="teacher-panel">
+        </div>
 
-<h3>Class: Financial Foundations</h3>
+        <div class="field" style="margin-top:14px;">
+          <label for="assignmentDescription">
+            Instructions
+          </label>
 
-<div class="stats">
+          <textarea
+            id="assignmentDescription"
+            placeholder="Write the instructions students should see..."
+          ></textarea>
+        </div>
 
-<div>
-<b>24</b>
-<span>Students</span>
-</div>
+        <div class="save-row">
+          <button id="addAssignmentButton" class="button button-primary">
+            Add Assignment
+          </button>
+        </div>
 
-<div>
-<b>18</b>
-<span>Completed</span>
-</div>
+        <div id="assignmentSuccess" class="teacher-success"></div>
 
-<div>
-<b>82%</b>
-<span>Avg. quiz</span>
-</div>
+      </section>
 
-</div>
 
-<h3>Class access</h3>
+      <!-- CURRENT ASSIGNMENTS -->
 
-<label>Teacher-given class code</label>
+      <section class="teacher-section">
 
-<input id="classCode" value="MP-4827">
+        <h3>Current Assignments</h3>
 
-<button onclick="saveClassCode()">
-Save class code
-</button>
+        <div id="teacherAssignments" class="teacher-assignment-list"></div>
 
-<p class="sub">
-Students can use the same code on this device. This prototype stores it locally in the browser.
-</p>
+      </section>
 
-<h3>Starting paper-trading amount</h3>
 
-<label>Beginning balance</label>
+      <!-- LIMITATION NOTE -->
 
-<select id="startingBalance" onchange="saveBalance()">
-<option value="5000">$5,000</option>
-<option value="10000">$10,000</option>
-<option value="25000">$25,000</option>
-<option value="50000">$50,000</option>
-</select>
+      <section class="teacher-section">
 
-<p class="sub">
-Use paper trading only. This setting is a classroom simulation balance.
-</p>
+        <div class="teacher-note">
+          <strong>Prototype note:</strong>
+          This version stores classroom information in the browser. That works
+          for testing the experience, but a real school-wide version would use
+          a secure online database so teacher assignments and student progress
+          can sync across different devices.
+        </div>
 
-<h3>Create assignment</h3>
+      </section>
 
-<label>Assignment title</label>
+    </div>
 
-<input
-id="aTitle"
-placeholder="e.g. Index Funds Basics"
->
+  </div>
 
-<label>Type</label>
 
-<select id="aType">
-<option>Reading + quiz</option>
-<option>Reading</option>
-<option>Quiz</option>
-<option>Paper-trading reflection</option>
-</select>
+  <script>
 
-<label>Due date</label>
+    /*
+      ============================================================
+      MARKET PULSE
+      Student class-joining system
+      ============================================================
+    */
 
-<input id="aDue" type="date">
 
-<button onclick="createAssignment()">
-Assign to class
-</button>
+    /* ----------------------------------------------------------
+       STORAGE KEYS
+    ---------------------------------------------------------- */
 
-</div>
+    const STORAGE = {
+      classCode: "mpClassCode",
+      startingBalance: "mpStartingBalance",
+      assignments: "mpAssignments",
+      joinedClass: "mpJoinedClass"
+    };
 
-<div class="teacher-panel">
 
-<h3>Current assignments</h3>
+    /* ----------------------------------------------------------
+       DEFAULT CLASS SETTINGS
+    ---------------------------------------------------------- */
 
-<div id="assignments">
+    const DEFAULT_CLASS_CODE = "MP-4827";
+    const DEFAULT_BALANCE = "5000";
 
-<div class="assignment">
-<b>Index Funds Basics</b>
-<span>Reading + 5 questions • Due Friday</span>
-<strong>18/24 complete</strong>
-</div>
 
-<div class="assignment">
-<b>Risk & Diversification</b>
-<span>6-minute reading + quiz</span>
-<strong>21/24 complete</strong>
-</div>
+    /* ----------------------------------------------------------
+       ELEMENTS
+    ---------------------------------------------------------- */
 
-<div class="assignment">
-<b>Paper Trading Reflection</b>
-<span>Explain your simulated decision</span>
-<strong>14/24 complete</strong>
-</div>
+    const joinScreen = document.getElementById("joinScreen");
+    const studentApp = document.getElementById("studentApp");
 
-</div>
+    const classCodeInput = document.getElementById("classCodeInput");
+    const joinClassButton = document.getElementById("joinClassButton");
+    const joinError = document.getElementById("joinError");
 
-<h3>Class insights</h3>
+    const teacherButton = document.getElementById("teacherButton");
+    const teacherLinkButton = document.getElementById("teacherLinkButton");
 
-<div class="notice">
-Most students understand diversification. Consider assigning the risk-and-fees lesson next.
-</div>
+    const teacherModal = document.getElementById("teacherModal");
+    const closeTeacherButton = document.getElementById("closeTeacherButton");
 
-</div>
+    const teacherClassCode = document.getElementById("teacherClassCode");
+    const startingBalance = document.getElementById("startingBalance");
+    const saveClassSettings = document.getElementById("saveClassSettings");
+    const settingsSuccess = document.getElementById("settingsSuccess");
 
-</div>
+    const assignmentTitle = document.getElementById("assignmentTitle");
+    const assignmentType = document.getElementById("assignmentType");
+    const assignmentDescription = document.getElementById("assignmentDescription");
+    const addAssignmentButton = document.getElementById("addAssignmentButton");
+    const assignmentSuccess = document.getElementById("assignmentSuccess");
 
-</div>
+    const teacherAssignments = document.getElementById("teacherAssignments");
+    const studentAssignments = document.getElementById("studentAssignments");
+    const studentReadings = document.getElementById("studentReadings");
 
-</div>
+    const studentClassCode = document.getElementById("studentClassCode");
+    const studentBalance = document.getElementById("studentBalance");
 
-<script>
+    const leaveClassButton = document.getElementById("leaveClassButton");
 
-function openTeacher(){
-document.getElementById('teacherModal').classList.add('open')
-}
 
-function closeTeacher(){
-document.getElementById('teacherModal').classList.remove('open')
-}
+    /* ----------------------------------------------------------
+       STORAGE HELPERS
+    ---------------------------------------------------------- */
 
-function addTicker(){
+    function getClassCode() {
+      return localStorage.getItem(STORAGE.classCode) || DEFAULT_CLASS_CODE;
+    }
 
-const t=document
-.getElementById('ticker')
-.value
-.trim()
-.toUpperCase()
-.replace(/[^A-Z.]/g,'');
+    function getStartingBalance() {
+      return localStorage.getItem(STORAGE.startingBalance) || DEFAULT_BALANCE;
+    }
 
-if(t){
+    function getAssignments() {
+      try {
+        const saved = localStorage.getItem(STORAGE.assignments);
 
-document.getElementById('added').textContent=
-t+' added to your practice watchlist.';
+        if (!saved) {
+          return [];
+        }
 
-document.getElementById('ticker').value='';
+        const assignments = JSON.parse(saved);
 
-}
+        return Array.isArray(assignments) ? assignments : [];
+      } catch (error) {
+        return [];
+      }
+    }
 
-}
+    function saveAssignments(assignments) {
+      localStorage.setItem(
+        STORAGE.assignments,
+        JSON.stringify(assignments)
+      );
+    }
 
-function savePrefs(){
 
-localStorage.setItem(
-'mpExperience',
-document.getElementById('experience').value
-);
+    /* ----------------------------------------------------------
+       FORMAT MONEY
+    ---------------------------------------------------------- */
 
-localStorage.setItem(
-'mpGoal',
-document.getElementById('goal').value
-);
+    function formatMoney(amount) {
+      const number = Number(amount);
 
-}
+      return number.toLocaleString("en-US", {
+        style: "currency",
+        currency: "USD",
+        maximumFractionDigits: 0
+      });
+    }
 
-function saveClassCode(){
 
-const c=document
-.getElementById('classCode')
-.value
-.trim()
-.toUpperCase();
+    /* ----------------------------------------------------------
+       SHOW / HIDE SCREENS
+    ---------------------------------------------------------- */
 
-localStorage.setItem('mpClassCode',c);
+    function showJoinScreen() {
+      joinScreen.classList.remove("hidden");
+      studentApp.classList.add("hidden");
+    }
 
-alert('Class code saved on this device: '+c);
+    function showStudentApp() {
+      joinScreen.classList.add("hidden");
+      studentApp.classList.remove("hidden");
 
-}
+      renderStudentApp();
+    }
 
-function saveBalance(){
 
-localStorage.setItem(
-'mpStartingBalance',
-document.getElementById('startingBalance').value
-);
+    /* ----------------------------------------------------------
+       STUDENT APP
+    ---------------------------------------------------------- */
 
-}
+    function renderStudentApp() {
 
-function createAssignment(){
+      const joinedCode =
+        localStorage.getItem(STORAGE.joinedClass) || getClassCode();
 
-const t=
-document.getElementById('aTitle')
-.value
-.trim()
-||
-'New investing assignment';
+      studentClassCode.textContent =
+        " • Class code: " + joinedCode;
 
-const type=
-document.getElementById('aType').value;
+      studentBalance.textContent =
+        formatMoney(getStartingBalance());
 
-const due=
-document.getElementById('aDue').value
-?
-new Date(
-document.getElementById('aDue').value+'T00:00'
-).toLocaleDateString()
-:
-'Set due date';
+      renderStudentAssignments();
+    }
 
-const el=document.createElement('div');
 
-el.className='assignment';
+    /* ----------------------------------------------------------
+       STUDENT ASSIGNMENTS
+    ---------------------------------------------------------- */
 
-el.innerHTML=
-'<b>'+
-t.replace(/[<>]/g,'')+
-'</b><span>'+
-type+
-' • Due '+
-due+
-'</span><strong>0/24 complete</strong>';
+    function renderStudentAssignments() {
 
-document
-.getElementById('assignments')
-.prepend(el);
+      const assignments = getAssignments();
 
-document.getElementById('aTitle').value='';
+      studentAssignments.innerHTML = "";
+      studentReadings.innerHTML = "";
 
-}
+      const readings = assignments.filter(
+        assignment => assignment.type === "Reading"
+      );
 
-window.addEventListener('load',()=>{
+      const otherAssignments = assignments.filter(
+        assignment => assignment.type !== "Reading"
+      );
 
-const e=localStorage.getItem('mpExperience');
-const g=localStorage.getItem('mpGoal');
-const c=localStorage.getItem('mpClassCode');
-const b=localStorage.getItem('mpStartingBalance');
 
-if(e)
-document.getElementById('experience').value=e;
+      if (otherAssignments.length === 0) {
 
-if(g)
-document.getElementById('goal').value=g;
+        const empty = document.createElement("div");
 
-if(c)
-document.getElementById('classCode').value=c;
+        empty.className = "empty-state";
 
-if(b)
-document.getElementById('startingBalance').value=b;
+        const strong = document.createElement("strong");
+        strong.textContent = "No assignments yet";
 
-});
+        const text = document.createElement("span");
+        text.textContent =
+          "Your teacher has not added any assignments yet.";
 
-</script>
+        empty.appendChild(strong);
+        empty.appendChild(text);
+
+        studentAssignments.appendChild(empty);
+
+      } else {
+
+        otherAssignments.forEach(assignment => {
+
+          const item = document.createElement("div");
+
+          item.className = "assignment";
+
+          const top = document.createElement("div");
+          top.className = "assignment-top";
+
+          const textArea = document.createElement("div");
+
+          const title = document.createElement("h3");
+          title.textContent = assignment.title;
+
+          const description = document.createElement("p");
+          description.textContent =
+            assignment.description || "No instructions provided.";
+
+          textArea.appendChild(title);
+          textArea.appendChild(description);
+
+          const type = document.createElement("div");
+          type.className = "assignment-type";
+          type.textContent = assignment.type;
+
+          top.appendChild(textArea);
+          top.appendChild(type);
+
+          item.appendChild(top);
+
+          studentAssignments.appendChild(item);
+
+        });
+
+      }
+
+
+      if (readings.length === 0) {
+
+        const empty = document.createElement("div");
+
+        empty.className = "empty-state";
+
+        const strong = document.createElement("strong");
+        strong.textContent = "No readings yet";
+
+        const text = document.createElement("span");
+        text.textContent =
+          "Your teacher has not added any readings yet.";
+
+        empty.appendChild(strong);
+        empty.appendChild(text);
+
+        studentReadings.appendChild(empty);
+
+      } else {
+
+        readings.forEach(assignment => {
+
+          const item = document.createElement("div");
+
+          item.className = "assignment";
+
+          const top = document.createElement("div");
+          top.className = "assignment-top";
+
+          const textArea = document.createElement("div");
+
+          const title = document.createElement("h3");
+          title.textContent = assignment.title;
+
+          const description = document.createElement("p");
+          description.textContent =
+            assignment.description || "No instructions provided.";
+
+          textArea.appendChild(title);
+          textArea.appendChild(description);
+
+          const type = document.createElement("div");
+          type.className = "assignment-type";
+          type.textContent = "Reading";
+
+          top.appendChild(textArea);
+          top.appendChild(type);
+
+          item.appendChild(top);
+
+          studentReadings.appendChild(item);
+
+        });
+
+      }
+
+    }
+
+
+    /* ----------------------------------------------------------
+       JOIN CLASS
+    ---------------------------------------------------------- */
+
+    function joinClass() {
+
+      const enteredCode =
+        classCodeInput.value.trim().toUpperCase();
+
+      joinError.textContent = "";
+
+      if (!enteredCode) {
+
+        joinError.textContent =
+          "Please enter your teacher's class code.";
+
+        return;
+      }
+
+
+      const correctCode =
+        getClassCode().trim().toUpperCase();
+
+
+      if (enteredCode !== correctCode) {
+
+        joinError.textContent =
+          "That class code was not found. Check the code with your teacher.";
+
+        return;
+      }
+
+
+      /*
+        Remember the student's class.
+
+        This is why the student does NOT have to
+        enter the code every time they return.
+      */
+
+      localStorage.setItem(
+        STORAGE.joinedClass,
+        correctCode
+      );
+
+      showStudentApp();
+    }
+
+
+    /* ----------------------------------------------------------
+       LEAVE CLASS
+    ---------------------------------------------------------- */
+
+    function leaveClass() {
+
+      const confirmed = confirm(
+        "Leave this class? You will need the class code to join again."
+      );
+
+      if (!confirmed) {
+        return;
+      }
+
+      localStorage.removeItem(STORAGE.joinedClass);
+
+      classCodeInput.value = "";
+
+      showJoinScreen();
+    }
+
+
+    /* ----------------------------------------------------------
+       TEACHER DASHBOARD
+    ---------------------------------------------------------- */
+
+    function openTeacherDashboard() {
+
+      teacherClassCode.value = getClassCode();
+      startingBalance.value = getStartingBalance();
+
+      settingsSuccess.textContent = "";
+      assignmentSuccess.textContent = "";
+
+      renderTeacherAssignments();
+
+      teacherModal.classList.remove("hidden");
+    }
+
+
+    function closeTeacherDashboard() {
+      teacherModal.classList.add("hidden");
+    }
+
+
+    /* ----------------------------------------------------------
+       SAVE TEACHER CLASS SETTINGS
+    ---------------------------------------------------------- */
+
+    function saveTeacherSettings() {
+
+      let code =
+        teacherClassCode.value.trim().toUpperCase();
+
+      if (!code) {
+        code = DEFAULT_CLASS_CODE;
+      }
+
+      localStorage.setItem(
+        STORAGE.classCode,
+        code
+      );
+
+      localStorage.setItem(
+        STORAGE.startingBalance,
+        startingBalance.value
+      );
+
+      teacherClassCode.value = code;
+
+      settingsSuccess.textContent =
+        "Class settings saved.";
+
+      setTimeout(() => {
+        settingsSuccess.textContent = "";
+      }, 2500);
+
+    }
+
+
+    /* ----------------------------------------------------------
+       ADD ASSIGNMENT
+    ---------------------------------------------------------- */
+
+    function addAssignment() {
+
+      const title =
+        assignmentTitle.value.trim();
+
+      const type =
+        assignmentType.value;
+
+      const description =
+        assignmentDescription.value.trim();
+
+
+      if (!title) {
+
+        assignmentSuccess.textContent =
+          "Please enter an assignment title.";
+
+        assignmentSuccess.style.color = "#c62828";
+
+        return;
+      }
+
+
+      const assignments = getAssignments();
+
+
+      assignments.push({
+        id: Date.now().toString(),
+        title: title,
+        type: type,
+        description: description
+      });
+
+
+      saveAssignments(assignments);
+
+
+      assignmentTitle.value = "";
+      assignmentDescription.value = "";
+
+
+      assignmentSuccess.style.color = "#16803c";
+
+      assignmentSuccess.textContent =
+        "Assignment added.";
+
+
+      renderTeacherAssignments();
+
+
+      setTimeout(() => {
+        assignmentSuccess.textContent = "";
+      }, 2500);
+
+    }
+
+
+    /* ----------------------------------------------------------
+       TEACHER ASSIGNMENTS
+    ---------------------------------------------------------- */
+
+    function renderTeacherAssignments() {
+
+      const assignments = getAssignments();
+
+      teacherAssignments.innerHTML = "";
+
+
+      if (assignments.length === 0) {
+
+        const empty = document.createElement("div");
+
+        empty.className = "empty-state";
+
+        const strong = document.createElement("strong");
+
+        strong.textContent =
+          "No assignments yet";
+
+        const text = document.createElement("span");
+
+        text.textContent =
+          "Create your first reading, quiz, activity, or reflection above.";
+
+        empty.appendChild(strong);
+        empty.appendChild(text);
+
+        teacherAssignments.appendChild(empty);
+
+        return;
+      }
+
+
+      assignments.forEach(assignment => {
+
+        const item =
+          document.createElement("div");
+
+        item.className =
+          "teacher-assignment";
+
+
+        const info =
+          document.createElement("div");
+
+        const title =
+          document.createElement("strong");
+
+        title.textContent =
+          assignment.title;
+
+
+        const details =
+          document.createElement("small");
+
+        details.textContent =
+          assignment.type;
+
+
+        info.appendChild(title);
+        info.appendChild(details);
+
+
+        const deleteButton =
+          document.createElement("button");
+
+        deleteButton.className =
+          "delete-assignment";
+
+        deleteButton.textContent =
+          "Delete";
+
+
+        deleteButton.addEventListener(
+          "click",
+          () => deleteAssignment(assignment.id)
+        );
+
+
+        item.appendChild(info);
+        item.appendChild(deleteButton);
+
+        teacherAssignments.appendChild(item);
+
+      });
+
+    }
+
+
+    /* ----------------------------------------------------------
+       DELETE ASSIGNMENT
+    ---------------------------------------------------------- */
+
+    function deleteAssignment(id) {
+
+      const assignments =
+        getAssignments().filter(
+          assignment => assignment.id !== id
+        );
+
+      saveAssignments(assignments);
+
+      renderTeacherAssignments();
+
+      /*
+        If a student is already viewing the app
+        on this same browser, update their view too.
+      */
+
+      renderStudentAssignments();
+    }
+
+
+    /* ----------------------------------------------------------
+       EVENT LISTENERS
+    ---------------------------------------------------------- */
+
+    joinClassButton.addEventListener(
+      "click",
+      joinClass
+    );
+
+
+    classCodeInput.addEventListener(
+      "keydown",
+      event => {
+
+        if (event.key === "Enter") {
+          joinClass();
+        }
+
+      }
+    );
+
+
+    teacherButton.addEventListener(
+      "click",
+      openTeacherDashboard
+    );
+
+
+    teacherLinkButton.addEventListener(
+      "click",
+      openTeacherDashboard
+    );
+
+
+    closeTeacherButton.addEventListener(
+      "click",
+      closeTeacherDashboard
+    );
+
+
+    saveClassSettings.addEventListener(
+      "click",
+      saveTeacherSettings
+    );
+
+
+    addAssignmentButton.addEventListener(
+      "click",
+      addAssignment
+    );
+
+
+    leaveClassButton.addEventListener(
+      "click",
+      leaveClass
+    );
+
+
+    teacherModal.addEventListener(
+      "click",
+      event => {
+
+        if (event.target === teacherModal) {
+          closeTeacherDashboard();
+        }
+
+      }
+    );
+
+
+    /* ----------------------------------------------------------
+       INITIAL LOAD
+    ---------------------------------------------------------- */
+
+    function initializeApp() {
+
+      /*
+        IMPORTANT:
+
+        If the student has never joined a class,
+        show ONLY the join screen.
+
+        No assignments.
+        No market dashboard.
+        No progress score.
+        No fake student information.
+      */
+
+      const joinedClass =
+        localStorage.getItem(STORAGE.joinedClass);
+
+
+      if (joinedClass) {
+        showStudentApp();
+      } else {
+        showJoinScreen();
+      }
+
+    }
+
+
+    initializeApp();
+
+  </script>
 
 </body>
 </html>
